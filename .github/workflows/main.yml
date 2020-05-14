@@ -1,0 +1,40 @@
+# This is a basic workflow to help you get started with Actions
+
+name: deployToAzure
+
+# Controls when the action will run. Triggers the workflow on push or pull request
+# events but only for the master branch
+on:
+  push:
+    branches: [ master ]
+    paths: azuredeploy.json
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  deploy:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+    - uses: actions/checkout@v2
+
+    - name: Azure Login
+      uses: Azure/login@v1.1
+      with:
+        # Paste output of `az ad sp create-for-rbac` as value of secret variable: AZURE_CREDENTIALS
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+    - name: Azure Resource Manager (ARM) Template Deployment JS
+      uses: whiteducksoftware/azure-arm-action-js@v2
+      with:
+        # Provide the name of a resource group.
+        resourceGroupName: github-actions-demo-rg
+        # Specify the path to the Azure Resource Manager template.
+        templateLocation: ./azuredeploy.json
+        # Specifies the name of the resource group deployment to create.
+        deploymentName: github-actions-runner # optional
+        # Supply deployment parameter values.
+        parameters: appServicePlanName=github-actions-demo-asp webAppName=github-actions-demo-app
