@@ -5,13 +5,13 @@
         "appServicePlanName": {
             "type": "string",
             "metadata": {
-                "description": "App Service Plan Name"
+                "description": "App Service Plan Name."
             }
         },
         "webAppName": {
             "type": "string",
             "metadata": {
-                "description": "Web app name"
+                "description": "Web app name."
             }
         }
     },
